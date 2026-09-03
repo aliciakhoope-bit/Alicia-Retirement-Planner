@@ -196,15 +196,15 @@
           <span class="text-xs text-amber-900/50" id="tableHeaderSubtitle">Horizon</span>
         </div>
 
-        <div class="overflow-x-auto max-h-72 overflow-y-auto border border-amber-900/5 rounded-2xl">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead class="bg-amber-50/60 text-amber-900/60 font-semibold uppercase text-[10px] tracking-wider sticky top-0 border-b border-amber-900/10">
+        <div class="overflow-x-auto max-h-72 overflow-y-auto border border-amber-900/10 rounded-2xl">
+          <table class="w-full text-left border-collapse text-xs table-fixed min-w-[500px]">
+            <thead class="bg-amber-50/80 text-amber-900/60 font-semibold uppercase text-[10px] tracking-wider sticky top-0 z-10 border-b border-amber-900/10">
               <tr>
-                <th class="py-3 px-4">Age</th>
-                <th class="py-3 px-4">Target (FV/mo)</th>
-                <th class="py-3 px-4">CPF LIFE (Est/mo)</th>
-                <th class="py-3 px-4">Private Draw (FV/mo)</th>
-                <th class="py-3 px-4 text-right">Portfolio Balance</th>
+                <th class="py-3 px-4 w-[22%]">Age</th>
+                <th class="py-3 px-4 w-[20%]">Target (FV/mo)</th>
+                <th class="py-3 px-4 w-[20%]">CPF LIFE (Est/mo)</th>
+                <th class="py-3 px-4 w-[20%]">Private Draw (FV/mo)</th>
+                <th class="py-3 px-4 w-[18%] text-right">Portfolio Balance</th>
               </tr>
             </thead>
             <tbody id="payoutTableBody" class="divide-y divide-amber-900/5 text-amber-950">
@@ -353,21 +353,26 @@
         }
 
         if (runningPrivateBal <= 0) {
-          rowClass = "bg-amber-100/30 text-amber-900/40";
-          statusBadge = `<span class="ml-2 text-[9px] bg-amber-200/50 text-amber-900/70 px-1.5 py-0.5 rounded font-medium">DEPLETED</span>`;
+          rowClass = "bg-amber-100/30 text-amber-900/50";
+          statusBadge = `<span class="inline-block text-[9px] leading-none bg-amber-200/70 text-amber-900/80 px-1.5 py-1 rounded font-semibold uppercase tracking-wider">DEPLETED</span>`;
         }
 
         let cpfDisplay = (activeCpfLifeMonthly > 0) 
           ? `<span class="text-amber-800 font-semibold">S$${Math.round(activeCpfLifeMonthly).toLocaleString()}</span>` 
-          : `<span class="text-amber-900/30">S$0 (Pre-65)</span>`;
+          : `<span class="text-amber-900/40">S$0 (Pre-65)</span>`;
 
         tableHtml += `
-          <tr class="${rowClass}">
-            <td class="py-3 px-4 font-semibold">${currentAge} ${statusBadge}</td>
-            <td class="py-3 px-4 text-amber-900/70">S$${Math.round(totalMonthlyTargetFV).toLocaleString()}</td>
-            <td class="py-3 px-4">${cpfDisplay}</td>
-            <td class="py-3 px-4 text-orange-900 font-medium">S$${Math.round(privateMonthlyDrawdownFV).toLocaleString()}</td>
-            <td class="py-3 px-4 text-right font-medium">S$${Math.round(Math.max(0, runningPrivateBal)).toLocaleString()}</td>
+          <tr class="${rowClass} align-middle">
+            <td class="py-3.5 px-4 font-semibold whitespace-nowrap">
+              <div class="flex items-center gap-2">
+                <span>${currentAge}</span>
+                ${statusBadge}
+              </div>
+            </td>
+            <td class="py-3.5 px-4 text-amber-900/70 whitespace-nowrap">S$${Math.round(totalMonthlyTargetFV).toLocaleString()}</td>
+            <td class="py-3.5 px-4 whitespace-nowrap">${cpfDisplay}</td>
+            <td class="py-3.5 px-4 text-orange-900 font-medium whitespace-nowrap">S$${Math.round(privateMonthlyDrawdownFV).toLocaleString()}</td>
+            <td class="py-3.5 px-4 text-right font-medium whitespace-nowrap">S$${Math.round(Math.max(0, runningPrivateBal)).toLocaleString()}</td>
           </tr>
         `;
 
@@ -400,13 +405,13 @@
               {
                 label: 'CPF LIFE Monthly Payout (S$)',
                 data: globalChartData.cpfPayouts,
-                backgroundColor: '#d99b26', // Warm Sunset Amber
+                backgroundColor: '#d99b26',
                 borderRadius: 4
               },
               {
                 label: 'Private Portfolio Monthly Drawdown (S$)',
                 data: globalChartData.privateDraws,
-                backgroundColor: '#c86d51', // Warm Terracotta
+                backgroundColor: '#c86d51',
                 borderRadius: 4
               }
             ]
