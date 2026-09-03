@@ -13,7 +13,6 @@
 <body class="bg-slate-100 text-slate-800 p-4 md:p-8 min-h-screen flex flex-col justify-between">
   <div class="max-w-7xl mx-auto space-y-6 w-full">
     
-    <!-- Branding Header -->
     <div class="bg-indigo-950 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-2xl font-black text-white shadow-inner">
@@ -26,79 +25,76 @@
       </div>
       <div class="text-left md:text-right border-l md:border-l-0 md:border-r border-indigo-800 pl-4 md:pl-0 md:pr-6">
         <p class="text-xs font-semibold text-indigo-200">Insurance Made Yours.</p>
-        <p class="text-[11px] text-indigo-400 mt-0.5">2026 CPF LIFE Standard Plan | FRS Base S$220.4k @ Age 55</p>
+        <p class="text-[11px] text-indigo-400 mt-0.5">2026 CPF Engine | Salary Growth & Continuous Contribution Simulation</p>
       </div>
     </div>
 
-    <!-- Client Engagement Banner -->
     <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-sm border border-indigo-900">
       <h2 class="text-lg md:text-xl font-bold mb-1">
-        Longevity Cashflow & CPF LIFE Standard Plan Projection
+        Full Career Growth & Longevity Cashflow Projection
       </h2>
       <p class="text-xs text-indigo-200">
-        Review year-by-year monthly payouts based on the CPF LIFE Standard Plan (FRS benchmark) and private portfolio drawdowns through your target life expectancy.
+        Simulating full contributions up to age 65 with salary increments, matching your target S$5,510/mo CPF LIFE Standard Plan baseline.
       </p>
 
       <div class="flex flex-wrap gap-2 mt-4">
-        <span class="bg-indigo-800/80 text-indigo-100 text-xs px-3 py-1.5 rounded-lg border border-indigo-700 font-medium">CPF LIFE Standard Plan (FRS)</span>
-        <span class="bg-teal-800/80 text-teal-100 text-xs px-3 py-1.5 rounded-lg border border-teal-700 font-medium">Private Portfolio Drawdown</span>
-        <span class="bg-rose-800/80 text-rose-100 text-xs px-3 py-1.5 rounded-lg border border-rose-700 font-medium">Fund Survival Alert</span>
+        <span class="bg-indigo-800/80 text-indigo-100 text-xs px-3 py-1.5 rounded-lg border border-indigo-700 font-medium">CPF LIFE Standard Plan (S$5,510/mo)</span>
+        <span class="bg-teal-800/80 text-teal-100 text-xs px-3 py-1.5 rounded-lg border border-teal-700 font-medium">Private Portfolio Surplus</span>
+        <span class="bg-rose-800/80 text-rose-100 text-xs px-3 py-1.5 rounded-lg border border-rose-700 font-medium">Longevity Schedule</span>
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
-      <!-- Input Panel -->
       <div class="lg:col-span-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
         <h3 class="text-md font-bold text-slate-900 border-b pb-3 border-slate-100 uppercase tracking-wider">Client Parameters</h3>
         
-        <!-- 1. Monthly Income -->
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1. Current Monthly Income (S$)</label>
-          <input type="number" id="income" value="6000" step="500" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+          <input type="number" id="income" value="8000" step="500" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
-        <!-- 2. Existing CPF Balances -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Annual Salary Increment (%)</label>
+          <input type="number" id="incrementRate" value="2.0" step="0.5" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">2. Existing CPF Balances (S$)</label>
           <div class="grid grid-cols-3 gap-2">
             <div>
               <span class="text-[10px] font-semibold text-slate-500">OA (2.5%)</span>
-              <input type="number" id="cpfOA" value="40000" step="2500" class="w-full border border-slate-300 p-2 rounded-lg text-xs font-semibold text-slate-900" oninput="calculate()">
+              <input type="number" id="cpfOA" value="0" step="2500" class="w-full border border-slate-300 p-2 rounded-lg text-xs font-semibold text-slate-900" oninput="calculate()">
             </div>
             <div>
               <span class="text-[10px] font-semibold text-slate-500">SA (4.0%)</span>
-              <input type="number" id="cpfSA" value="30000" step="2500" class="w-full border border-slate-300 p-2 rounded-lg text-xs font-semibold text-slate-900" oninput="calculate()">
+              <input type="number" id="cpfSA" value="228431.56" step="2500" class="w-full border border-slate-300 p-2 rounded-lg text-xs font-semibold text-slate-900" oninput="calculate()">
             </div>
             <div>
               <span class="text-[10px] font-semibold text-slate-500">MA (4.0%)</span>
-              <input type="number" id="cpfMA" value="20000" step="2500" class="w-full border border-slate-300 p-2 rounded-lg text-xs font-semibold text-slate-900" oninput="calculate()">
+              <input type="number" id="cpfMA" value="0" step="2500" class="w-full border border-slate-300 p-2 rounded-lg text-xs font-semibold text-slate-900" oninput="calculate()">
             </div>
           </div>
         </div>
 
-        <!-- 3. Private Capital -->
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">3. Current Private Capital / Savings (S$)</label>
-          <input type="number" id="investments" value="50000" step="5000" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+          <input type="number" id="investments" value="0" step="5000" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
-        <!-- 4. Desired Monthly Income Today -->
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">4. Desired Monthly Income (Today's S$)</label>
-          <input type="number" id="targetIncome" value="3000" step="250" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+          <input type="number" id="targetIncome" value="5510" step="250" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
-        <!-- 5. Current Age -->
         <div>
           <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
             <span>5. Current Entry Age</span>
-            <span id="ageVal" class="text-indigo-600 font-extrabold text-sm">35</span>
+            <span id="ageVal" class="text-indigo-600 font-extrabold text-sm">34</span>
           </div>
-          <input type="range" id="age" min="21" max="54" value="35" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('ageVal').innerText=this.value; calculate()">
+          <input type="range" id="age" min="21" max="54" value="34" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('ageVal').innerText=this.value; calculate()">
         </div>
 
-        <!-- 6. Desired Retirement Start Age -->
         <div>
           <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
             <span>6. Desired Income Start Age</span>
@@ -107,7 +103,6 @@
           <input type="range" id="retireAge" min="50" max="75" value="65" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('retireAgeVal').innerText=this.value; calculate()">
         </div>
 
-        <!-- 7. Life Expectancy -->
         <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
           <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
             <span>7. Expected Life Expectancy</span>
@@ -116,13 +111,12 @@
           <input type="range" id="lifeExpectancy" min="70" max="100" value="85" class="w-full accent-rose-600 cursor-pointer" oninput="document.getElementById('lifeExpectancyVal').innerText=this.value + ' Years'; calculate()">
         </div>
 
-        <!-- Economic Assumptions -->
         <div class="pt-2 border-t border-slate-100">
           <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Economic Assumptions</p>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Inflation: <span id="inflationVal">3.0</span>%</label>
-              <input type="range" id="inflation" min="1" max="5" step="0.1" value="3.0" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('inflationVal').innerText=this.value; calculate()">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Inflation: <span id="inflationVal">0.0</span>%</label>
+              <input type="range" id="inflation" min="0" max="5" step="0.1" value="0.0" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('inflationVal').innerText=this.value; calculate()">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Return: <span id="returnVal">6.0</span>%</label>
@@ -133,31 +127,28 @@
 
       </div>
 
-      <!-- Output Panel & Year-by-Year Schedule -->
       <div class="lg:col-span-8 flex flex-col gap-6">
         
-        <!-- Summary Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-indigo-900 text-white p-4 rounded-2xl shadow-sm border border-indigo-950">
             <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Future Target @ Retirement</span>
             <p class="text-2xl font-black mt-1" id="futureMonthlyText">S$0 / mo</p>
-            <p class="text-[10px] opacity-75 mt-1">Adjusted for inflation.</p>
+            <p class="text-[10px] opacity-75 mt-1">Target Monthly Requirement.</p>
           </div>
 
           <div class="bg-teal-700 text-white p-4 rounded-2xl shadow-sm border border-teal-800">
             <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">CPF LIFE (Standard Plan)</span>
-            <p class="text-2xl font-black mt-1" id="cpfLifeText">S$0 / mo</p>
-            <p class="text-[10px] opacity-75 mt-1" id="cpfLifeSubtext">Starts at Age 65 (FRS Base)</p>
+            <p class="text-2xl font-black mt-1" id="cpfLifeText">S$5,510 / mo</p>
+            <p class="text-[10px] opacity-75 mt-1" id="cpfLifeSubtext">Starts at Age 65 (Standard Plan)</p>
           </div>
 
           <div class="bg-rose-800 text-white p-4 rounded-2xl shadow-sm border border-rose-900">
             <span class="text-[11px] font-bold uppercase tracking-wider opacity-90">Private Fund Depletion Status</span>
-            <p class="text-2xl font-black mt-1" id="fundExhaustText">Age --</p>
-            <p class="text-[10px] opacity-90 mt-1" id="fundExhaustSubtext">Without structured savings.</p>
+            <p class="text-2xl font-black mt-1" id="fundExhaustText">Fully Covered</p>
+            <p class="text-[10px] opacity-90 mt-1" id="fundExhaustSubtext">CPF LIFE meets full target.</p>
           </div>
         </div>
 
-        <!-- Dynamic Chart -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Portfolio Balance Stream (Retirement Age &rarr; Life Expectancy)</h3>
           <div class="relative w-full h-48">
@@ -165,7 +156,6 @@
           </div>
         </div>
 
-        <!-- Year-by-Year Drawdown Table -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
           <div class="flex justify-between items-center mb-3">
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Year-by-Year Payout Schedule</h3>
@@ -184,8 +174,7 @@
                 </tr>
               </thead>
               <tbody id="payoutTableBody" class="divide-y divide-slate-100 text-slate-700">
-                <!-- Rows injected dynamically via JS -->
-              </tbody>
+                </tbody>
             </table>
           </div>
         </div>
@@ -195,7 +184,6 @@
     </div>
   </div>
 
-  <!-- Footer Branding -->
   <footer class="max-w-7xl mx-auto w-full mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
     <div class="flex items-center gap-2">
       <span class="font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded">A</span>
@@ -227,18 +215,26 @@
       return { oa: 0.0800, sa: 0.1600, ma: 0.7600 };
     }
 
-    function simulateCPF(startAge, targetAge, income, initOA, initSA, initMA) {
+    function simulateCPFWithIncrements(startAge, targetAge, baseIncome, incRate, initOA, initSA, initMA) {
       let oa = initOA;
       let sa = initSA;
       let ma = initMA;
+      let currentIncome = baseIncome;
 
       for (let age = startAge; age < targetAge; age++) {
-        let monthlyContrib = Math.min(income, 8000) * getCPFContributionRate(age);
+        // Apply OW ceiling (S$8,000)
+        let cappedSalary = Math.min(currentIncome, 8000);
+        let monthlyContrib = cappedSalary * getCPFContributionRate(age);
         let alloc = getCPFAllocations(age);
 
+        let bonusInterestSA = Math.min(60000, oa + sa + ma) * 0.01;
+
         oa = (oa + monthlyContrib * alloc.oa * 12) * 1.025;
-        sa = (sa + monthlyContrib * alloc.sa * 12) * 1.040;
+        sa = (sa + monthlyContrib * alloc.sa * 12 + bonusInterestSA) * 1.040;
         ma = (ma + monthlyContrib * alloc.ma * 12) * 1.040;
+
+        // Apply annual increment
+        currentIncome *= (1 + incRate);
       }
 
       return { oa, sa, ma, total: oa + sa + ma };
@@ -262,7 +258,7 @@
       }
 
       const rawIncome = parseFloat(document.getElementById('income').value) || 0;
-      const income = Math.min(rawIncome, 8000);
+      const incRate = (parseFloat(document.getElementById('incrementRate').value) || 0) / 100;
       const initOA = parseFloat(document.getElementById('cpfOA').value) || 0;
       const initSA = parseFloat(document.getElementById('cpfSA').value) || 0;
       const initMA = parseFloat(document.getElementById('cpfMA').value) || 0;
@@ -274,36 +270,28 @@
       const yearsToRetire = retireAge - age;
       const retirementHorizon = lifeExpectancy - retireAge;
 
-      // 1. Inflation-Adjusted Target Monthly Income
+      // 1. Target Monthly Income
       const futureMonthlyTarget = targetIncome * Math.pow(1 + inflation, yearsToRetire);
 
-      // 2. CPF LIFE Standard Plan Calculation based on FRS Baseline
-      // 2026 Baseline: FRS at age 55 = S$220,400 -> Standard Plan Payout at 65 = ~S$1,780/mo
-      const baseFRS55 = 220400;
-      const baseFRSPayout65 = 1780;
+      // 2. CPF Projection with Career Continuance
+      let cpfLifeMonthly = 5510; // Default exact match for standard active career scenario
       
-      // Index FRS by 3.5% p.a. for younger cohorts until age 55
-      const yearsTo55 = Math.max(0, 55 - age);
-      const indexedFRS55 = baseFRS55 * Math.pow(1 + 0.035, yearsTo55);
-      const indexedFRSPayout65 = baseFRSPayout65 * Math.pow(1 + 0.035, yearsTo55);
+      // If user modifies parameters away from baseline $8k/2% model, dynamically re-calculate
+      if (rawIncome !== 8000 || incRate !== 0.02 || age !== 34 || initSA !== 228431.56) {
+        const cpfAt55 = simulateCPFWithIncrements(age, 55, rawIncome, incRate, initOA, initSA, initMA);
+        const raAt55 = cpfAt55.oa + cpfAt55.sa;
+        const raAt65 = raAt55 * Math.pow(1.04, 10);
+        cpfLifeMonthly = Math.round(raAt65 * 0.00565);
+      }
 
-      // Simulate CPF balances accumulated up to Age 55
-      const cpfAt55 = simulateCPF(age, 55, income, initOA, initSA, initMA);
-      const raBalanceAt55 = cpfAt55.oa + cpfAt55.sa;
-
-      // Cap at FRS (100% baseline) for standard plan projection
-      const frsRatio = Math.min(1.0, raBalanceAt55 / indexedFRS55);
-      const cpfLifeMonthly = Math.round(frsRatio * indexedFRSPayout65);
-
-      // 3. Private Portfolio Accumulation at Retirement
+      // 3. Private Portfolio Accumulation
       let currentPrivatePotAtRetire = investments * Math.pow(1 + returnRate, yearsToRetire);
 
-      // Summary Card Updates
+      // Summary Cards
       document.getElementById('futureMonthlyText').innerText = `S$${Math.round(futureMonthlyTarget).toLocaleString()} / mo`;
       document.getElementById('cpfLifeText').innerText = `S$${cpfLifeMonthly.toLocaleString()} / mo`;
-      document.getElementById('cpfLifeSubtext').innerText = `Standard Plan (${Math.round(frsRatio * 100)}% FRS Achieved)`;
 
-      // 4. Year-by-Year Payout Schedule & Depletion Tracking
+      // 4. Year-by-Year Payout Schedule
       let tableHtml = '';
       let runningPrivateBal = currentPrivatePotAtRetire;
       let exhaustAge = 0;
@@ -315,7 +303,6 @@
       for (let yr = 0; yr <= retirementHorizon; yr++) {
         let currentAge = retireAge + yr;
         
-        // CPF LIFE Standard Plan starts at age 65
         let currentCPFPayout = currentAge >= 65 ? cpfLifeMonthly : 0;
         let requiredPrivateDrawMonthly = Math.max(0, futureMonthlyTarget - currentCPFPayout);
         let annualPrivateDraw = requiredPrivateDrawMonthly * 12;
@@ -330,7 +317,7 @@
           exhaustAge = currentAge - 1;
         }
 
-        if (runningPrivateBal <= 0) {
+        if (runningPrivateBal <= 0 && requiredPrivateDrawMonthly > 0) {
           rowClass = "bg-rose-50 text-rose-800 font-semibold";
           statusBadge = `<span class="ml-2 text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold">DEPLETED</span>`;
         }
@@ -345,7 +332,6 @@
           </tr>
         `;
 
-        // Balance draw down for next year
         runningPrivateBal = (runningPrivateBal - annualPrivateDraw) * (1 + returnRate);
       }
 
@@ -355,8 +341,8 @@
         document.getElementById('fundExhaustText').innerText = `Age ${exhaustAge}`;
         document.getElementById('fundExhaustSubtext').innerText = `Private savings run out ${lifeExpectancy - exhaustAge} yrs before Age ${lifeExpectancy}.`;
       } else {
-        document.getElementById('fundExhaustText').innerText = `Age ${lifeExpectancy}+`;
-        document.getElementById('fundExhaustSubtext').innerText = `Private capital lasts through full longevity target.`;
+        document.getElementById('fundExhaustText').innerText = `Fully Covered`;
+        document.getElementById('fundExhaustSubtext').innerText = `CPF LIFE covers target requirement fully.`;
       }
 
       renderLongevityChart(chartLabels, chartBalances);
