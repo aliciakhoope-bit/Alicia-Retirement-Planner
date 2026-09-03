@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alicia | Longevity Cashflow & Drawdown Planner</title>
+  <title>Alicia | Longevity Cashflow & Funding Target Planner</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -25,22 +25,22 @@
       </div>
       <div class="text-left md:text-right border-l md:border-l-0 md:border-r border-indigo-800 pl-4 md:pl-0 md:pr-6">
         <p class="text-xs font-semibold text-indigo-200">Insurance Made Yours.</p>
-        <p class="text-[11px] text-indigo-400 mt-0.5">Private Portfolio Longevity & Drawdown Schedule</p>
+        <p class="text-[11px] text-indigo-400 mt-0.5">Real Today's Value vs. Future Nominal Value Funding Planner</p>
       </div>
     </div>
 
     <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-sm border border-indigo-900">
       <h2 class="text-lg md:text-xl font-bold mb-1">
-        Private Wealth Longevity Projection
+        Present Value (Today's S$) & Future Value Funding Analysis
       </h2>
       <p class="text-xs text-indigo-200">
-        Review your year-by-year monthly drawdown schedule and fund survival status from retirement age through expected life expectancy.
+        Compare today's purchasing power with future nominal cashflows to fund your desired retirement drawdown pool.
       </p>
 
       <div class="flex flex-wrap gap-2 mt-4">
-        <span class="bg-teal-800/80 text-teal-100 text-xs px-3 py-1.5 rounded-lg border border-teal-700 font-medium">Private Portfolio Drawdown</span>
-        <span class="bg-indigo-800/80 text-indigo-100 text-xs px-3 py-1.5 rounded-lg border border-indigo-700 font-medium">Inflation Adjusted</span>
-        <span class="bg-rose-800/80 text-rose-100 text-xs px-3 py-1.5 rounded-lg border border-rose-700 font-medium">Capital Depletion Tracker</span>
+        <span class="bg-teal-800/80 text-teal-100 text-xs px-3 py-1.5 rounded-lg border border-teal-700 font-medium">Today's vs. Future Value</span>
+        <span class="bg-indigo-800/80 text-indigo-100 text-xs px-3 py-1.5 rounded-lg border border-indigo-700 font-medium">Monthly Savings Calculator</span>
+        <span class="bg-rose-800/80 text-rose-100 text-xs px-3 py-1.5 rounded-lg border border-rose-700 font-medium">Inflation-Adjusted Schedule</span>
       </div>
     </div>
 
@@ -50,12 +50,12 @@
         <h3 class="text-md font-bold text-slate-900 border-b pb-3 border-slate-100 uppercase tracking-wider">Client Parameters</h3>
         
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1. Current Capital / Savings (S$)</label>
-          <input type="number" id="investments" value="500000" step="10000" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1. Existing Savings / Portfolio Today (S$)</label>
+          <input type="number" id="investments" value="100000" step="10000" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">2. Desired Monthly Income (Today's S$)</label>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">2. Desired Monthly Income (Today's Value S$)</label>
           <input type="number" id="targetIncome" value="5000" step="250" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
@@ -87,11 +87,11 @@
           <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Economic Assumptions</p>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Inflation: <span id="inflationVal">2.5</span>%</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Inflation Rate: <span id="inflationVal">2.5</span>%</label>
               <input type="range" id="inflation" min="0" max="5" step="0.1" value="2.5" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('inflationVal').innerText=this.value; calculate()">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Return: <span id="returnVal">5.0</span>%</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Investment Return: <span id="returnVal">5.0</span>%</label>
               <input type="range" id="returnRate" min="1" max="10" step="0.2" value="5.0" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('returnVal').innerText=this.value; calculate()">
             </div>
           </div>
@@ -101,23 +101,43 @@
 
       <div class="lg:col-span-8 flex flex-col gap-6">
         
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-indigo-900 text-white p-4 rounded-2xl shadow-sm border border-indigo-950">
-            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Future Monthly Target</span>
-            <p class="text-2xl font-black mt-1" id="futureMonthlyText">S$0 / mo</p>
-            <p class="text-[10px] opacity-75 mt-1">Adjusted for inflation at retirement.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-indigo-900 text-white p-5 rounded-2xl shadow-sm border border-indigo-950 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Option A: Lump Sum Needed Today</span>
+              <p class="text-3xl font-black mt-1" id="lumpSumNeededText">S$0</p>
+            </div>
+            <p class="text-[11px] opacity-80 mt-2" id="lumpSumSubtext">Today's single lump sum required to fully fund target.</p>
           </div>
 
-          <div class="bg-teal-700 text-white p-4 rounded-2xl shadow-sm border border-teal-800">
-            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Capital @ Retirement</span>
-            <p class="text-2xl font-black mt-1" id="capitalAtRetireText">S$0</p>
-            <p class="text-[10px] opacity-75 mt-1">Accumulated private wealth.</p>
+          <div class="bg-teal-800 text-white p-5 rounded-2xl shadow-sm border border-teal-900 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Option B: Monthly Savings Needed Now</span>
+              <p class="text-3xl font-black mt-1" id="monthlySavingsNeededText">S$0 / mo</p>
+            </div>
+            <p class="text-[11px] opacity-80 mt-2" id="monthlySavingsSubtext">Regular monthly savings starting today until retirement.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-slate-800 text-white p-4 rounded-2xl shadow-sm border border-slate-900">
+            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Fund Pool @ Retirement</span>
+            <p class="text-lg font-bold mt-1 text-teal-300" id="pvFundRequiredText">Today's S$: --</p>
+            <p class="text-xs font-semibold opacity-90" id="fvFundRequiredText">Future S$: --</p>
+            <p class="text-[10px] opacity-75 mt-1">Total pool required at age of retirement.</p>
+          </div>
+
+          <div class="bg-slate-800 text-white p-4 rounded-2xl shadow-sm border border-slate-900">
+            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Monthly Payout @ Age Start</span>
+            <p class="text-lg font-bold mt-1 text-indigo-300" id="pvMonthlyTargetText">Today's S$: --</p>
+            <p class="text-xs font-semibold opacity-90" id="fvMonthlyTargetText">Future S$: --</p>
+            <p class="text-[10px] opacity-75 mt-1">Target monthly payout at retirement start.</p>
           </div>
 
           <div class="bg-rose-800 text-white p-4 rounded-2xl shadow-sm border border-rose-900">
             <span class="text-[11px] font-bold uppercase tracking-wider opacity-90">Fund Depletion Status</span>
-            <p class="text-2xl font-black mt-1" id="fundExhaustText">Age --</p>
-            <p class="text-[10px] opacity-90 mt-1" id="fundExhaustSubtext">Capital longevity status.</p>
+            <p class="text-xl font-bold mt-1" id="fundExhaustText">Age --</p>
+            <p class="text-[10px] opacity-90 mt-1" id="fundExhaustSubtext">Status based on existing savings.</p>
           </div>
         </div>
 
@@ -130,7 +150,7 @@
 
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
           <div class="flex justify-between items-center mb-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Year-by-Year Payout & Drawdown Schedule</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Year-by-Year Payout Schedule (Real vs. Nominal Value)</h3>
             <span class="text-xs text-slate-500 font-medium" id="tableHeaderSubtitle">Retirement Age to Expectancy</span>
           </div>
 
@@ -139,8 +159,9 @@
               <thead class="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-200">
                 <tr>
                   <th class="py-2.5 px-3">Age</th>
-                  <th class="py-2.5 px-3">Target Monthly Payout</th>
-                  <th class="py-2.5 px-3">Annual Drawdown</th>
+                  <th class="py-2.5 px-3">Payout (Future S$/mo)</th>
+                  <th class="py-2.5 px-3">Payout (Today's S$/mo)</th>
+                  <th class="py-2.5 px-3">Annual Draw (Future S$)</th>
                   <th class="py-2.5 px-3 text-right">Remaining Portfolio Balance</th>
                 </tr>
               </thead>
@@ -185,27 +206,68 @@
         document.getElementById('lifeExpectancyVal').innerText = lifeExpectancy + ' Years';
       }
 
-      const investments = parseFloat(document.getElementById('investments').value) || 0;
-      const targetIncome = parseFloat(document.getElementById('targetIncome').value) || 0;
+      const existingSavings = parseFloat(document.getElementById('investments').value) || 0;
+      const targetIncomeToday = parseFloat(document.getElementById('targetIncome').value) || 0;
       const inflation = parseFloat(document.getElementById('inflation').value) / 100;
       const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
 
       const yearsToRetire = retireAge - age;
       const retirementHorizon = lifeExpectancy - retireAge;
 
-      // 1. Inflation-Adjusted Target Monthly Requirement at Retirement
-      const futureMonthlyTarget = targetIncome * Math.pow(1 + inflation, yearsToRetire);
+      // 1. Target Monthly Income: Today's Value vs Future Value at Retirement Start
+      const futureMonthlyTargetAtStart = targetIncomeToday * Math.pow(1 + inflation, yearsToRetire);
 
-      // 2. Private Capital Accumulation at Retirement Age
-      const capitalAtRetire = investments * Math.pow(1 + returnRate, yearsToRetire);
+      // 2. Total Retirement Fund Pool Required at Retirement Age
+      let requiredTotalFundAtRetireFV = 0;
 
-      // Summary Card Updates
-      document.getElementById('futureMonthlyText').innerText = `S$${Math.round(futureMonthlyTarget).toLocaleString()} / mo`;
-      document.getElementById('capitalAtRetireText').innerText = `S$${Math.round(capitalAtRetire).toLocaleString()}`;
+      for (let yr = 0; yr < retirementHorizon; yr++) {
+        let annualDrawdownFV = (futureMonthlyTargetAtStart * Math.pow(1 + inflation, yr)) * 12;
+        requiredTotalFundAtRetireFV += annualDrawdownFV / Math.pow(1 + returnRate, yr);
+      }
 
-      // 3. Year-by-Year Drawdown Schedule
+      // Present Value (Today's Value) of the Total Retirement Fund Pool Required
+      const requiredTotalFundAtRetirePV = requiredTotalFundAtRetireFV / Math.pow(1 + inflation, yearsToRetire);
+
+      // 3. Future Value of Existing Savings
+      const fvExistingSavings = existingSavings * Math.pow(1 + returnRate, yearsToRetire);
+
+      // Shortfall at Retirement
+      const shortfallAtRetireFV = Math.max(0, requiredTotalFundAtRetireFV - fvExistingSavings);
+
+      // 4. Funding Targets
+      // A. Lump Sum Needed TODAY
+      const lumpSumNeededToday = requiredTotalFundAtRetireFV / Math.pow(1 + returnRate, yearsToRetire);
+      const additionalLumpSumNeededToday = Math.max(0, lumpSumNeededToday - existingSavings);
+
+      // B. Monthly Savings Needed NOW until Retirement Age
+      const monthlyReturn = returnRate / 12;
+      const totalMonths = yearsToRetire * 12;
+      let monthlySavingsNeeded = 0;
+
+      if (shortfallAtRetireFV > 0 && totalMonths > 0) {
+        monthlySavingsNeeded = shortfallAtRetireFV * (monthlyReturn / (Math.pow(1 + monthlyReturn, totalMonths) - 1));
+      }
+
+      // UI Card Updates
+      document.getElementById('lumpSumNeededText').innerText = `S$${Math.round(lumpSumNeededToday).toLocaleString()}`;
+      if (existingSavings > 0) {
+        document.getElementById('lumpSumSubtext').innerText = `S$${Math.round(existingSavings).toLocaleString()} existing + S$${Math.round(additionalLumpSumNeededToday).toLocaleString()} additional today.`;
+      } else {
+        document.getElementById('lumpSumSubtext').innerText = `Full single deposit required today.`;
+      }
+
+      document.getElementById('monthlySavingsNeededText').innerText = `S$${Math.round(monthlySavingsNeeded).toLocaleString()} / mo`;
+      document.getElementById('monthlySavingsSubtext').innerText = `Saved monthly for ${yearsToRetire} years (until age ${retireAge}).`;
+
+      document.getElementById('pvFundRequiredText').innerText = `Today's S$: S$${Math.round(requiredTotalFundAtRetirePV).toLocaleString()}`;
+      document.getElementById('fvFundRequiredText').innerText = `Future S$: S$${Math.round(requiredTotalFundAtRetireFV).toLocaleString()}`;
+
+      document.getElementById('pvMonthlyTargetText').innerText = `Today's S$: S$${Math.round(targetIncomeToday).toLocaleString()} / mo`;
+      document.getElementById('fvMonthlyTargetText').innerText = `Future S$: S$${Math.round(futureMonthlyTargetAtStart).toLocaleString()} / mo`;
+
+      // 5. Year-by-Year Drawdown Schedule (Real vs Nominal)
       let tableHtml = '';
-      let runningPrivateBal = capitalAtRetire;
+      let runningPrivateBal = fvExistingSavings;
       let exhaustAge = 0;
       let chartLabels = [];
       let chartBalances = [];
@@ -214,10 +276,11 @@
 
       for (let yr = 0; yr <= retirementHorizon; yr++) {
         let currentAge = retireAge + yr;
+        let elapsedYearsFromToday = yearsToRetire + yr;
         
-        // Annual inflation adjustment during retirement years
-        let currentMonthlyPayout = futureMonthlyTarget * Math.pow(1 + inflation, yr);
-        let annualDrawdown = currentMonthlyPayout * 12;
+        let futureMonthlyPayout = futureMonthlyTargetAtStart * Math.pow(1 + inflation, yr);
+        let todaysValueMonthlyPayout = futureMonthlyPayout / Math.pow(1 + inflation, elapsedYearsFromToday);
+        let annualDrawdownFV = futureMonthlyPayout * 12;
 
         chartLabels.push(`Age ${currentAge}`);
         chartBalances.push(Math.round(Math.max(0, runningPrivateBal)));
@@ -237,24 +300,24 @@
         tableHtml += `
           <tr class="${rowClass}">
             <td class="py-2.5 px-3 font-bold">${currentAge} ${statusBadge}</td>
-            <td class="py-2.5 px-3 text-indigo-700 font-medium">S$${Math.round(currentMonthlyPayout).toLocaleString()} / mo</td>
-            <td class="py-2.5 px-3 text-teal-700 font-medium">S$${Math.round(annualDrawdown).toLocaleString()}</td>
+            <td class="py-2.5 px-3 text-indigo-700 font-medium">S$${Math.round(futureMonthlyPayout).toLocaleString()}</td>
+            <td class="py-2.5 px-3 text-emerald-700 font-medium">S$${Math.round(todaysValueMonthlyPayout).toLocaleString()}</td>
+            <td class="py-2.5 px-3 text-teal-700 font-medium">S$${Math.round(annualDrawdownFV).toLocaleString()}</td>
             <td class="py-2.5 px-3 text-right font-semibold">S$${Math.round(Math.max(0, runningPrivateBal)).toLocaleString()}</td>
           </tr>
         `;
 
-        // Calculate remaining portfolio balance for next year
-        runningPrivateBal = (runningPrivateBal - annualDrawdown) * (1 + returnRate);
+        runningPrivateBal = (runningPrivateBal - annualDrawdownFV) * (1 + returnRate);
       }
 
       document.getElementById('payoutTableBody').innerHTML = tableHtml;
 
       if (exhaustAge > 0) {
         document.getElementById('fundExhaustText').innerText = `Age ${exhaustAge}`;
-        document.getElementById('fundExhaustSubtext').innerText = `Funds run out ${lifeExpectancy - exhaustAge} yrs before Age ${lifeExpectancy}.`;
+        document.getElementById('fundExhaustSubtext').innerText = `Depletes ${lifeExpectancy - exhaustAge} yrs before Age ${lifeExpectancy}.`;
       } else {
         document.getElementById('fundExhaustText').innerText = `Fully Covered`;
-        document.getElementById('fundExhaustSubtext').innerText = `Capital lasts through full longevity target.`;
+        document.getElementById('fundExhaustSubtext').innerText = `Existing savings cover full longevity target.`;
       }
 
       renderLongevityChart(chartLabels, chartBalances);
