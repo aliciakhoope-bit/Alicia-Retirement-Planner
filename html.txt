@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Singapore Integrated Retirement & CPF Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 p-4 md:p-8 min-h-screen">
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- Title Header -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900">Singapore Retirement Gap Planner</h1>
+        <p class="text-sm text-slate-500">Determine required personal monthly savings on top of statutory CPF payouts.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl text-xs text-slate-600">
+        <span class="font-semibold text-slate-800">CPF Rules:</span> OW Ceiling S$8,000/mo | CPF LIFE Starts at Age 65
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Input Panel -->
+      <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+        <h2 class="text-lg font-bold text-slate-900 border-b pb-3 border-slate-100">Client Profile & Variables</h2>
+        
+        <!-- 1. Monthly Income -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1. Current Monthly Income (S$)</label>
+          <input type="number" id="income" value="6000" step="500" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+          <p class="text-[11px] text-slate-400 mt-1">Capped at statutory S$8,000/mo OW ceiling for CPF calculation.</p>
+        </div>
+
+        <!-- 2. On Hand Investments -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">2. Current On-Hand Investments (S$)</label>
+          <input type="number" id="investments" value="50000" step="5000" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+        </div>
+
+        <!-- 3. Desired Monthly Retirement Income -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">3. Desired Monthly Income (Today's Value)</label>
+          <input type="number" id="targetIncome" value="3500" step="250" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
+        </div>
+
+        <!-- 4. Entry Age -->
+        <div>
+          <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <span>4. Entry Age (Variable)</span>
+            <span id="ageVal" class="text-indigo-600 font-extrabold text-sm">30</span>
+          </div>
+          <input type="range" id="age" min="21" max="60" value="30" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('ageVal').innerText=this.value; calculate()">
+        </div>
+
+        <!-- 5. Desired Income Start Age -->
+        <div>
+          <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <span>5. Desired Income Start Age</span>
+            <span id="retireAgeVal" class="text-indigo-600 font-extrabold text-sm">65</span>
+          </div>
+          <input type="range" id="retireAge" min="50" max="75" value="65" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('retireAgeVal').innerText=this.value; calculate()">
+        </div>
+
+        <!-- Economic Assumptions -->
+        <div class="pt-2 border-t border-slate-100">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Portfolio Assumptions</p>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Inflation: <span id="inflationVal">2.5</span>%</label>
+              <input type="range" id="inflation" min="1" max="5" step="0.1" value="2.5" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('inflationVal').innerText=this.value; calculate()">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Portfolio Growth: <span id="returnVal">6.0</span>%</label>
+              <input type="range" id="returnRate" min="2" max="10" step="0.2" value="6.0" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('returnVal').innerText=this.value; calculate()">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Output Metrics & Charts -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        
+        <!-- Target Output Metrics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <div class="bg-indigo-900 text-white p-5 rounded-2xl shadow-sm border border-indigo-950 flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider opacity-75">Current Lump Sum Needed Today</span>
+              <p class="text-3xl font-black mt-2 tracking-tight" id="lumpSumResult">S$0</p>
+            </div>
+            <p class="text-[11px] opacity-75 mt-3">Upfront cash top-up needed today (0 ongoing savings) to bridge the total shortfall.</p>
+          </div>
+
+          <div class="bg-teal-700 text-white p-5 rounded-2xl shadow-sm border border-teal-800 flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider opacity-75">Monthly Savings Needed From Today</span>
+              <p class="text-3xl font-black mt-2 tracking-tight" id="monthlyResult">S$0 / mo</p>
+            </div>
+            <p class="text-[11px] opacity-75 mt-3">Additional monthly investment required on top of statutory CPF contributions.</p>
+          </div>
+
+        </div>
+
+        <!-- Interactive Chart Visual -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex-1 flex flex-col">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-700">Accumulation Stream vs Target Pot</h3>
+            <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-medium" id="shortfallBadge">Shortfall: S$0</span>
+          </div>
+          <div class="relative w-full h-72 my-auto">
+            <canvas id="growthChart"></canvas>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 text-center text-xs">
+            <div>
+              <span class="text-slate-400 block">Total Required Pot</span>
+              <span class="font-extrabold text-slate-800 text-sm" id="targetPotText">S$0</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block">Projected CPF at 65</span>
+              <span class="font-extrabold text-indigo-600 text-sm" id="cpfText">S$0</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block">Projected Private Pot</span>
+              <span class="font-extrabold text-teal-600 text-sm" id="privateText">S$0</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let myChart;
+
+    // Statutory CPF Rates by Age Group
+    function getCPFContributionRate(age) {
+      if (age <= 55) return 0.37;
+      if (age <= 60) return 0.34;
+      if (age <= 65) return 0.25;
+      if (age <= 70) return 0.165;
+      return 0.125;
+    }
+
+    function calculate() {
+      const age = parseInt(document.getElementById('age').value);
+      let retireAge = parseInt(document.getElementById('retireAge').value);
+      
+      if (retireAge <= age) {
+        retireAge = age + 1;
+        document.getElementById('retireAge').value = retireAge;
+        document.getElementById('retireAgeVal').innerText = retireAge;
+      }
+
+      const rawIncome = parseFloat(document.getElementById('income').value) || 0;
+      const income = Math.min(rawIncome, 8000); // S$8,000 OW Ceiling
+      const investments = parseFloat(document.getElementById('investments').value) || 0;
+      const targetIncome = parseFloat(document.getElementById('targetIncome').value) || 0;
+      const inflation = parseFloat(document.getElementById('inflation').value) / 100;
+      const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
+
+      const yearsToRetire = retireAge - age;
+      const cpfStartAge = 65;
+
+      // Future monthly income target adjusted for inflation
+      const futureMonthlyTarget = targetIncome * Math.pow(1 + inflation, yearsToRetire);
+      
+      // Calculate total capital required including early retirement gap before age 65
+      let totalPotNeeded = 0;
+      if (retireAge < cpfStartAge) {
+        const gapYears = cpfStartAge - retireAge;
+        const earlyGapPot = futureMonthlyTarget * 12 * gapYears;
+        const post65Pot = futureMonthlyTarget * 12 * 20; // 20-year payout window assumption
+        totalPotNeeded = earlyGapPot + post65Pot;
+      } else {
+        totalPotNeeded = futureMonthlyTarget * 12 * 20;
+      }
+
+      let cpfBalance = 0;
+      let currentInv = investments;
+
+      let chartLabels = [];
+      let cpfData = [];
+      let privateData = [];
+
+      for (let i = 0; i <= yearsToRetire; i++) {
+        let currentAge = age + i;
+        chartLabels.push(`Age ${currentAge}`);
+        cpfData.push(Math.round(cpfBalance));
+        privateData.push(Math.round(currentInv));
+
+        if (i < yearsToRetire) {
+          let annualCPFContrib = income * getCPFContributionRate(currentAge) * 12;
+          cpfBalance = (cpfBalance + annualCPFContrib) * 1.0325; // 3.25% weighted CPF interest
+          currentInv = currentInv * (1 + returnRate);
+        }
+      }
+
+      const totalProjected = cpfBalance + currentInv;
+      const shortfall = Math.max(0, totalPotNeeded - totalProjected);
+
+      // Present value & monthly annuity calculations
+      const lumpSumToday = shortfall / Math.pow(1 + returnRate, yearsToRetire);
+      const rMonthly = returnRate / 12;
+      const nMonths = yearsToRetire * 12;
+      const monthlySavingsNeeded = shortfall > 0 ? (shortfall * rMonthly) / (Math.pow(1 + rMonthly, nMonths) - 1) : 0;
+
+      // Render Outputs
+      document.getElementById('lumpSumResult').innerText = `S$${Math.round(lumpSumToday).toLocaleString()}`;
+      document.getElementById('monthlyResult').innerText = `S$${Math.round(monthlySavingsNeeded).toLocaleString()} / mo`;
+      
+      document.getElementById('targetPotText').innerText = `S$${Math.round(totalPotNeeded / 1000).toLocaleString()}k`;
+      document.getElementById('cpfText').innerText = `S$${Math.round(cpfBalance / 1000).toLocaleString()}k`;
+      document.getElementById('privateText').innerText = `S$${Math.round(currentInv / 1000).toLocaleString()}k`;
+
+      const badge = document.getElementById('shortfallBadge');
+      if (shortfall > 0) {
+        badge.innerText = `Shortfall: S$${Math.round(shortfall).toLocaleString()}`;
+        badge.className = "text-xs bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-lg font-semibold";
+      } else {
+        badge.innerText = `On Track (Surplus: S$${Math.round(Math.abs(totalPotNeeded - totalProjected)).toLocaleString()})`;
+        badge.className = "text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg font-semibold";
+      }
+
+      renderChart(chartLabels, cpfData, privateData);
+    }
+
+    function renderChart(labels, cpfData, privateData) {
+      const ctx = document.getElementById('growthChart').getContext('2d');
+      if (myChart) myChart.destroy();
+
+      myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { 
+              label: 'CPF Capital Growth', 
+              data: cpfData, 
+              borderColor: '#4f46e5', 
+              backgroundColor: 'rgba(79, 70, 229, 0.15)', 
+              fill: true,
+              tension: 0.3
+            },
+            { 
+              label: 'Private Portfolio Growth', 
+              data: privateData, 
+              borderColor: '#0d9488', 
+              backgroundColor: 'rgba(13, 148, 136, 0.15)', 
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+          },
+          scales: {
+            y: { 
+              ticks: { 
+                callback: function(value) { return 'S$' + (value / 1000) + 'k'; } 
+              } 
+            }
+          }
+        }
+      });
+    }
+
+    calculate();
+  </script>
+</body>
+</html>
