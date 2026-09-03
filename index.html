@@ -1,10 +1,3 @@
-Here is the complete updated code with a dedicated field for Estimated CPF LIFE Monthly Payout (from CPF Website).
-Key Features Added
- * CPF LIFE Monthly Input: A dedicated field allowing you to enter the monthly payout projected by the CPF LIFE estimator.
- * Combined Cashflow Projection: Automatically subtracts your projected CPF LIFE payout from your total desired monthly income, calculating the exact net private shortfall that your private portfolio needs to fund.
- * Updated Actionable Savings Target: Both the Lump Sum Needed Today and Monthly Savings Needed Now are recalculated based on the remaining private gap after factoring in CPF LIFE.
- * Drawdown Table Integration: The year-by-year drawdown schedule splits out CPF LIFE Payout, Private Drawdown, and Total Combined Income for full transparency.
-Complete Updated Code (index.html)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +13,7 @@ Complete Updated Code (index.html)
 <body class="bg-slate-100 text-slate-800 p-4 md:p-8 min-h-screen flex flex-col justify-between">
   <div class="max-w-7xl mx-auto space-y-6 w-full">
     
+    <!-- Branding Header -->
     <div class="bg-indigo-950 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-2xl font-black text-white shadow-inner">
@@ -32,20 +26,21 @@ Complete Updated Code (index.html)
       </div>
       <div class="text-left md:text-right border-l md:border-l-0 md:border-r border-indigo-800 pl-4 md:pl-0 md:pr-6">
         <p class="text-xs font-semibold text-indigo-200">Insurance Made Yours.</p>
-        <p class="text-[11px] text-indigo-400 mt-0.5">Private Wealth & CPF LIFE Integrated Funding Planner</p>
+        <p class="text-[11px] text-indigo-400 mt-0.5">Early Retirement & CPF LIFE Timing Planner</p>
       </div>
     </div>
 
+    <!-- Client Engagement Banner -->
     <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-sm border border-indigo-900">
       <h2 class="text-lg md:text-xl font-bold mb-1">
-        Integrated Retirement & CPF LIFE Capital Planner
+        Early Retirement & Integrated CPF LIFE Planner
       </h2>
       <p class="text-xs text-indigo-200">
-        Combine your estimated CPF LIFE payout with private savings to calculate the exact lump sum or monthly savings required now to achieve your desired lifestyle.
+        Account for early retirement years funded entirely by private wealth, with CPF LIFE payouts kicking in automatically at Age 65.
       </p>
 
       <div class="flex flex-wrap gap-2 mt-4">
-        <span class="bg-amber-800/80 text-amber-100 text-xs px-3 py-1.5 rounded-lg border border-amber-700 font-medium">CPF LIFE Integrated</span>
+        <span class="bg-amber-800/80 text-amber-100 text-xs px-3 py-1.5 rounded-lg border border-amber-700 font-medium">CPF LIFE (Age 65+)</span>
         <span class="bg-indigo-800/80 text-indigo-100 text-xs px-3 py-1.5 rounded-lg border border-indigo-700 font-medium">Lump Sum Target</span>
         <span class="bg-teal-800/80 text-teal-100 text-xs px-3 py-1.5 rounded-lg border border-teal-700 font-medium">Monthly Savings Needed</span>
       </div>
@@ -53,25 +48,30 @@ Complete Updated Code (index.html)
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
+      <!-- Input Panel -->
       <div class="lg:col-span-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
         <h3 class="text-md font-bold text-slate-900 border-b pb-3 border-slate-100 uppercase tracking-wider">Client Parameters</h3>
         
+        <!-- 1. Existing Private Capital -->
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">1. Existing Savings / Portfolio Today (S$)</label>
           <input type="number" id="investments" value="100000" step="10000" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
+        <!-- 2. Desired Monthly Income Today -->
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">2. Target Monthly Income (Today's S$)</label>
           <input type="number" id="targetIncome" value="5000" step="250" class="w-full border border-slate-300 p-2.5 rounded-xl font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="calculate()">
         </div>
 
+        <!-- 3. Estimated CPF LIFE Monthly Payout -->
         <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-xl">
           <label class="block text-xs font-bold text-amber-900 uppercase tracking-wider mb-1">3. Est. CPF LIFE Monthly Payout (S$)</label>
-          <p class="text-[11px] text-amber-700 mb-2">From CPF website estimator (estimated payout starting at age 65+).</p>
+          <p class="text-[11px] text-amber-700 mb-2">Payout from CPF website (starts automatically at Age 65).</p>
           <input type="number" id="cpfLifePayout" value="1500" step="100" class="w-full border border-amber-300 p-2.5 rounded-xl font-bold text-amber-900 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white" oninput="calculate()">
         </div>
 
+        <!-- 4. Current Age -->
         <div>
           <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
             <span>4. Current Entry Age</span>
@@ -80,14 +80,16 @@ Complete Updated Code (index.html)
           <input type="range" id="age" min="21" max="64" value="34" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('ageVal').innerText=this.value; calculate()">
         </div>
 
+        <!-- 5. Desired Retirement Start Age -->
         <div>
           <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
             <span>5. Desired Retirement Start Age</span>
-            <span id="retireAgeVal" class="text-indigo-600 font-extrabold text-sm">65</span>
+            <span id="retireAgeVal" class="text-indigo-600 font-extrabold text-sm">50</span>
           </div>
-          <input type="range" id="retireAge" min="50" max="75" value="65" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('retireAgeVal').innerText=this.value; calculate()">
+          <input type="range" id="retireAge" min="40" max="75" value="50" class="w-full accent-indigo-600 cursor-pointer" oninput="document.getElementById('retireAgeVal').innerText=this.value; calculate()">
         </div>
 
+        <!-- 6. Expected Life Expectancy -->
         <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
           <div class="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
             <span>6. Expected Life Expectancy</span>
@@ -96,6 +98,7 @@ Complete Updated Code (index.html)
           <input type="range" id="lifeExpectancy" min="70" max="100" value="85" class="w-full accent-rose-600 cursor-pointer" oninput="document.getElementById('lifeExpectancyVal').innerText=this.value + ' Years'; calculate()">
         </div>
 
+        <!-- Economic Assumptions -->
         <div class="pt-2 border-t border-slate-100">
           <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Economic Assumptions</p>
           <div class="grid grid-cols-2 gap-4">
@@ -105,22 +108,24 @@ Complete Updated Code (index.html)
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Investment Return: <span id="returnVal">5.0</span>%</label>
-              <input type="range" id="returnRate" min="1" max="10" step="0.2" value="5.0" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('returnVal').innerText=this.value; calculate()">
+              <input type="range" id="returnRate" min="1" max="10" step="0.2" value="5.0" class="w-full accent-slate-600 cursor-pointer" oninput="document.getElementById('returnRate').innerText=this.value; calculate()">
             </div>
           </div>
         </div>
 
       </div>
 
+      <!-- Output Panel & Year-by-Year Schedule -->
       <div class="lg:col-span-8 flex flex-col gap-6">
         
+        <!-- Net Private Funding Needed Highlights -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="bg-indigo-900 text-white p-5 rounded-2xl shadow-sm border border-indigo-950 flex flex-col justify-between">
             <div>
               <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Option A: Net Lump Sum Needed Today</span>
               <p class="text-3xl font-black mt-1" id="lumpSumNeededText">S$0</p>
             </div>
-            <p class="text-[11px] opacity-80 mt-2" id="lumpSumSubtext">Capital needed today after factoring in CPF LIFE.</p>
+            <p class="text-[11px] opacity-80 mt-2" id="lumpSumSubtext">Capital needed today accounting for early gap years before CPF LIFE starts at 65.</p>
           </div>
 
           <div class="bg-teal-800 text-white p-5 rounded-2xl shadow-sm border border-teal-900 flex flex-col justify-between">
@@ -132,28 +137,30 @@ Complete Updated Code (index.html)
           </div>
         </div>
 
+        <!-- Target Metrics: Today's Value vs Future Value & Income Breakdown -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-slate-800 text-white p-4 rounded-2xl shadow-sm border border-slate-900">
             <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Private Gap @ Retirement</span>
             <p class="text-sm font-bold mt-1 text-teal-300" id="pvFundRequiredText">Today's S$: --</p>
             <p class="text-xs font-semibold opacity-90" id="fvFundRequiredText">Future S$: --</p>
-            <p class="text-[10px] opacity-75 mt-1">Private fund pool required at retirement age.</p>
+            <p class="text-[10px] opacity-75 mt-1">Private fund pool required at retirement start.</p>
           </div>
 
           <div class="bg-slate-800 text-white p-4 rounded-2xl shadow-sm border border-slate-900">
-            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">Monthly Payout Breakdown</span>
-            <p class="text-xs font-bold mt-1 text-amber-300" id="cpfLifeText">CPF LIFE: S$0/mo</p>
-            <p class="text-xs font-bold text-indigo-300" id="privateGapText">Private Gap: S$0/mo</p>
-            <p class="text-[10px] opacity-75 mt-1">In today's purchasing power.</p>
+            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75">CPF LIFE Timing Status</span>
+            <p class="text-xs font-bold mt-1 text-amber-300" id="cpfLifeTimingText">CPF LIFE: S$0 (Pre-65)</p>
+            <p class="text-xs font-bold text-indigo-300" id="privateGapText">Starts at Age 65</p>
+            <p class="text-[10px] opacity-75 mt-1">100% private funded prior to age 65.</p>
           </div>
 
           <div class="bg-rose-800 text-white p-4 rounded-2xl shadow-sm border border-rose-900">
             <span class="text-[11px] font-bold uppercase tracking-wider opacity-90">Current Savings Status</span>
             <p class="text-xl font-bold mt-1" id="fundExhaustText">Age --</p>
-            <p class="text-[10px] opacity-90 mt-1" id="fundExhaustSubtext">Based on existing savings + CPF LIFE.</p>
+            <p class="text-[10px] opacity-90 mt-1" id="fundExhaustSubtext">Based on existing savings + CPF LIFE @ 65.</p>
           </div>
         </div>
 
+        <!-- Dynamic Chart -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Portfolio Balance Stream (Retirement Age &rarr; Life Expectancy)</h3>
           <div class="relative w-full h-48">
@@ -161,6 +168,7 @@ Complete Updated Code (index.html)
           </div>
         </div>
 
+        <!-- Year-by-Year Drawdown Table -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
           <div class="flex justify-between items-center mb-3">
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Year-by-Year Integrated Payout Schedule</h3>
@@ -179,7 +187,8 @@ Complete Updated Code (index.html)
                 </tr>
               </thead>
               <tbody id="payoutTableBody" class="divide-y divide-slate-100 text-slate-700">
-                </tbody>
+                <!-- Rows injected dynamically via JS -->
+              </tbody>
             </table>
           </div>
         </div>
@@ -189,6 +198,7 @@ Complete Updated Code (index.html)
     </div>
   </div>
 
+  <!-- Footer Branding -->
   <footer class="max-w-7xl mx-auto w-full mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
     <div class="flex items-center gap-2">
       <span class="font-black text-indigo-900 bg-indigo-100 px-2 py-0.5 rounded">A</span>
@@ -221,40 +231,46 @@ Complete Updated Code (index.html)
 
       const existingSavings = parseFloat(document.getElementById('investments').value) || 0;
       const targetIncomeToday = parseFloat(document.getElementById('targetIncome').value) || 0;
-      const cpfLifeMonthly = parseFloat(document.getElementById('cpfLifePayout').value) || 0;
+      const cpfLifeMonthlyInput = parseFloat(document.getElementById('cpfLifePayout').value) || 0;
       const inflation = parseFloat(document.getElementById('inflation').value) / 100;
       const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
 
       const yearsToRetire = retireAge - age;
       const retirementHorizon = lifeExpectancy - retireAge;
+      const cpfStartAge = 65;
 
-      // 1. Calculate Target Income & Net Shortfall after CPF LIFE
-      const netPrivateGapToday = Math.max(0, targetIncomeToday - cpfLifeMonthly);
-      const futureNetPrivateMonthlyTarget = netPrivateGapToday * Math.pow(1 + inflation, yearsToRetire);
-      const futureTotalMonthlyTarget = targetIncomeToday * Math.pow(1 + inflation, yearsToRetire);
-
-      // 2. Total Net Private Pool Required at Retirement Age
+      // Calculate Net Private Pool Needed at Retirement Start
       let requiredNetPrivateFundAtRetireFV = 0;
 
       for (let yr = 0; yr < retirementHorizon; yr++) {
-        let annualPrivateDrawdownFV = (futureNetPrivateMonthlyTarget * Math.pow(1 + inflation, yr)) * 12;
+        let currentAge = retireAge + yr;
+        
+        // Target Monthly Income inflated to future year
+        let totalMonthlyTargetFV = (targetIncomeToday * Math.pow(1 + inflation, yearsToRetire)) * Math.pow(1 + inflation, yr);
+        
+        // CPF LIFE only active at age 65+
+        let activeCpfLifeMonthly = (currentAge >= cpfStartAge) ? cpfLifeMonthlyInput : 0;
+        
+        // Net private monthly gap required for this year
+        let netPrivateMonthlyDrawFV = Math.max(0, totalMonthlyTargetFV - activeCpfLifeMonthly);
+        let annualPrivateDrawdownFV = netPrivateMonthlyDrawFV * 12;
+
+        // Discount back to retirement start age
         requiredNetPrivateFundAtRetireFV += annualPrivateDrawdownFV / Math.pow(1 + returnRate, yr);
       }
 
       const requiredNetPrivateFundAtRetirePV = requiredNetPrivateFundAtRetireFV / Math.pow(1 + inflation, yearsToRetire);
 
-      // 3. Future Value of Existing Savings
+      // Future Value of Existing Savings at Retirement Start
       const fvExistingSavings = existingSavings * Math.pow(1 + returnRate, yearsToRetire);
 
-      // Net Shortfall at Retirement Age
+      // Net Shortfall at Retirement Start Age
       const shortfallAtRetireFV = Math.max(0, requiredNetPrivateFundAtRetireFV - fvExistingSavings);
 
-      // 4. Savings Targets Needed TODAY
-      // A. Total Lump Sum Needed Today (for Net Private Gap)
+      // Savings Targets Needed TODAY
       const lumpSumNeededToday = requiredNetPrivateFundAtRetireFV / Math.pow(1 + returnRate, yearsToRetire);
       const additionalLumpSumNeededToday = Math.max(0, lumpSumNeededToday - existingSavings);
 
-      // B. Monthly Savings Needed Starting Now until Retirement Age
       const monthlyReturn = returnRate / 12;
       const totalMonths = yearsToRetire * 12;
       let monthlySavingsNeeded = 0;
@@ -263,7 +279,7 @@ Complete Updated Code (index.html)
         monthlySavingsNeeded = shortfallAtRetireFV * (monthlyReturn / (Math.pow(1 + monthlyReturn, totalMonths) - 1));
       }
 
-      // UI Display Updates
+      // UI Displays
       document.getElementById('lumpSumNeededText').innerText = `S$${Math.round(lumpSumNeededToday).toLocaleString()}`;
       if (existingSavings > 0) {
         document.getElementById('lumpSumSubtext').innerText = `S$${Math.round(existingSavings).toLocaleString()} existing + S$${Math.round(additionalLumpSumNeededToday).toLocaleString()} additional lump sum today.`;
@@ -277,10 +293,15 @@ Complete Updated Code (index.html)
       document.getElementById('pvFundRequiredText').innerText = `Today's S$: S$${Math.round(requiredNetPrivateFundAtRetirePV).toLocaleString()}`;
       document.getElementById('fvFundRequiredText').innerText = `Future S$: S$${Math.round(requiredNetPrivateFundAtRetireFV).toLocaleString()}`;
 
-      document.getElementById('cpfLifeText').innerText = `CPF LIFE: S$${Math.round(cpfLifeMonthly).toLocaleString()}/mo`;
-      document.getElementById('privateGapText').innerText = `Private Gap: S$${Math.round(netPrivateGapToday).toLocaleString()}/mo`;
+      if (retireAge < cpfStartAge) {
+        document.getElementById('cpfLifeTimingText').innerText = `Ages ${retireAge}-${cpfStartAge - 1}: S$0 (Pre-65)`;
+        document.getElementById('privateGapText').innerText = `Age 65+: S$${Math.round(cpfLifeMonthlyInput).toLocaleString()}/mo`;
+      } else {
+        document.getElementById('cpfLifeTimingText').innerText = `CPF LIFE: S$${Math.round(cpfLifeMonthlyInput).toLocaleString()}/mo`;
+        document.getElementById('privateGapText').innerText = `Active from Day 1`;
+      }
 
-      // 5. Year-by-Year Drawdown Schedule
+      // Drawdown Schedule & Table
       let tableHtml = '';
       let runningPrivateBal = fvExistingSavings;
       let exhaustAge = 0;
@@ -292,8 +313,9 @@ Complete Updated Code (index.html)
       for (let yr = 0; yr <= retirementHorizon; yr++) {
         let currentAge = retireAge + yr;
         
-        let totalMonthlyTargetFV = futureTotalMonthlyTarget * Math.pow(1 + inflation, yr);
-        let privateMonthlyDrawdownFV = futureNetPrivateMonthlyTarget * Math.pow(1 + inflation, yr);
+        let totalMonthlyTargetFV = (targetIncomeToday * Math.pow(1 + inflation, yearsToRetire)) * Math.pow(1 + inflation, yr);
+        let activeCpfLifeMonthly = (currentAge >= cpfStartAge) ? cpfLifeMonthlyInput : 0;
+        let privateMonthlyDrawdownFV = Math.max(0, totalMonthlyTargetFV - activeCpfLifeMonthly);
         let annualPrivateDrawdownFV = privateMonthlyDrawdownFV * 12;
 
         chartLabels.push(`Age ${currentAge}`);
@@ -302,20 +324,24 @@ Complete Updated Code (index.html)
         let rowClass = "hover:bg-slate-50";
         let statusBadge = "";
 
-        if (runningPrivateBal <= 0 && exhaustAge === 0 && yr > 0 && netPrivateGapToday > 0) {
+        if (runningPrivateBal <= 0 && exhaustAge === 0 && yr > 0) {
           exhaustAge = currentAge - 1;
         }
 
-        if (runningPrivateBal <= 0 && netPrivateGapToday > 0) {
+        if (runningPrivateBal <= 0) {
           rowClass = "bg-rose-50 text-rose-800 font-semibold";
           statusBadge = `<span class="ml-2 text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold">DEPLETED</span>`;
         }
+
+        let cpfDisplay = (activeCpfLifeMonthly > 0) 
+          ? `<span class="text-amber-700 font-semibold">S$${Math.round(activeCpfLifeMonthly).toLocaleString()}</span>` 
+          : `<span class="text-slate-400 font-normal">S$0 (Pre-65)</span>`;
 
         tableHtml += `
           <tr class="${rowClass}">
             <td class="py-2.5 px-3 font-bold">${currentAge} ${statusBadge}</td>
             <td class="py-2.5 px-3 text-slate-700 font-medium">S$${Math.round(totalMonthlyTargetFV).toLocaleString()}</td>
-            <td class="py-2.5 px-3 text-amber-700 font-semibold">S$${Math.round(cpfLifeMonthly).toLocaleString()}</td>
+            <td class="py-2.5 px-3">${cpfDisplay}</td>
             <td class="py-2.5 px-3 text-indigo-700 font-medium">S$${Math.round(privateMonthlyDrawdownFV).toLocaleString()}</td>
             <td class="py-2.5 px-3 text-right font-semibold">S$${Math.round(Math.max(0, runningPrivateBal)).toLocaleString()}</td>
           </tr>
@@ -374,4 +400,3 @@ Complete Updated Code (index.html)
   </script>
 </body>
 </html>
-
